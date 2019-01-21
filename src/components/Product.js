@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -96,3 +97,13 @@ const ProductWrapper = styled.div`
 		transform: translate(0, 0);
 	}
 `;
+
+Product.propTypes = {
+	product: PropTypes.shape({
+		id: PropTypes.number,
+		img: PropTypes.string,
+		title: PropTypes.string,
+		price: PropTypes.number,
+		inCart: PropTypes.bool
+	}).isRequired
+};
