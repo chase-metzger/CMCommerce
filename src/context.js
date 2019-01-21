@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { storeProducts, detailProduct } from './data';
 
 const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
-	let [products, setProducts] = useState(storeProducts);
+	let [products, setProducts] = useState([]);
 	let [details, setDetails] = useState(detailProduct);
+
+	function copyProducts() {
+		let tempProducts = [];
+		storeProducts.forEach(product => {
+			const singleProduct = {...product};
+			tempProducts = [...tempProducts, singleProduct];
+		});
+		setProducts(tempProducts);
+	}
+
+	useEffect(() => {
+		copyProducts();
+	});
 
 	function handleDetail() {
 		console.log('hello from detail');
