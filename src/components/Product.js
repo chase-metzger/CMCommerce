@@ -37,13 +37,13 @@ export default class Product extends React.Component {
 const ProductWrapper = styled.div`
 	.card {
 		border-color: transparent;
-		transition: all 1s linear;
+		transition: all 0.45s linear;
 	}
 
 	.card-footer {
 		background: transparent;
 		border-top: transparent;
-		transition: all 1s linear;
+		transition: all 0.45s linear;
 	}
 
 	&:hover {
@@ -63,7 +63,7 @@ const ProductWrapper = styled.div`
 	}
 
 	.card-img-top {
-		transition: all 1s linear;
+		transition: all 0.45s linear;
 	}
 
 	.img-container:hover .card-img-top {
