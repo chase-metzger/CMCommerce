@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { storeProducts, detailProduct } from './data';
+import { storeProducts } from './data';
 
 const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
 	let [products, setProducts] = useState([]);
-	let [details, setDetails] = useState(detailProduct);
 
 	function copyProducts() {
 		let tempProducts = [];
@@ -21,8 +20,8 @@ const ProductProvider = ({children}) => {
 		copyProducts();
 	});
 
-	function handleDetail() {
-		console.log('hello from detail');
+	function getItem(id) {
+		return products.find(item => item.id === id);
 	}
 
 	function addToCart() {
@@ -32,9 +31,8 @@ const ProductProvider = ({children}) => {
 	return (
 		<ProductContext.Provider value={{
 			products,
-			detailProduct: details,
-			handleDetail,
-			addToCart
+			addToCart,
+			getItem
 		}}>
 			{children}
 		</ProductContext.Provider>

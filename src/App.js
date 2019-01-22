@@ -17,7 +17,7 @@ class App extends React.Component {
 				<Navbar></Navbar>
 				<Switch>
 					<Route exact path="/" component={ProductList}></Route>
-					<Route path="/details" component={Details}></Route>
+					<Route path="/details/:id" component={Details}></Route>
 					<Route path="/cart" component={Cart}></Route>
 					<Route component={Default}></Route>
 				</Switch>
