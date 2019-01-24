@@ -6,8 +6,8 @@ import { ProductConsumer } from '../context';
 
 export default class Details extends React.Component {
 
-	renderDetails = (product, addToCart) => {
-		const { company, img, info, price, title, inCart } = product;
+	renderDetails = (product, inCart, addToCart) => {
+		const { company, img, info, price, title } = product;
 		return (
 			<div className="container py-5">
 				<div className="row">
@@ -66,8 +66,9 @@ export default class Details extends React.Component {
 				{value => {
 					const id = Number(this.props.match.params.id);
 					const product = value.getItem(id);
+					const inCart = value.isItemInCart(id);
 					if(product) {
-						return this.renderDetails(product, value.addToCart);
+						return this.renderDetails(product, inCart, value.addToCart);
 					} else {
 						return <Redirect to="/" />
 					}

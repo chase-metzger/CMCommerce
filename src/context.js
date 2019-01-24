@@ -5,33 +5,39 @@ import { storeProducts } from './data';
 const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
-	let [products, setProducts] = useState([]);
-
-	function copyProducts() {
-		let tempProducts = [];
-		storeProducts.forEach(product => {
-			const singleProduct = {...product};
-			tempProducts = [...tempProducts, singleProduct];
-		});
-		setProducts(tempProducts);
-	}
+	const initialCart = JSON.parse(window.localStorage.getItem('cart'));
+	let [products, setProducts] = useState(storeProducts);
+	let [cart, setCart] = useState(initialCart ? initialCart : []);
 
 	useEffect(() => {
-		copyProducts();
-	});
+		localStorage.setItem('cart', JSON.stringify(cart));
+	}, [cart]);
 
 	function getItem(id) {
 		return products.find(item => item.id === id);
 	}
 
-	function addToCart() {
-		console.log('hello from add to card');
+	function addToCart(id) {
+		let tempProducts = [...products];
+		const index = tempProducts.indexOf(getItem(id));
+		const product = tempProducts[index];
+		if(isItemInCart(product.id)) return;
+		
+		product.count = 1;
+		product.total = product.price;
+		setProducts(tempProducts);
+		setCart([...cart, product.id]);
+	}
+
+	function isItemInCart(id) {
+		return cart.includes(id);
 	}
 
 	return (
 		<ProductContext.Provider value={{
 			products,
 			addToCart,
+			isItemInCart,
 			getItem
 		}}>
 			{children}
