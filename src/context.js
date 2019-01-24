@@ -8,6 +8,10 @@ const ProductProvider = ({children}) => {
 	const initialCart = JSON.parse(window.localStorage.getItem('cart'));
 	let [products, setProducts] = useState(storeProducts);
 	let [cart, setCart] = useState(initialCart ? initialCart : []);
+	let [modalData, setModalData] = useState({
+		isOpen: true,
+		itemId: 1
+	});
 
 	useEffect(() => {
 		localStorage.setItem('cart', JSON.stringify(cart));
@@ -22,7 +26,7 @@ const ProductProvider = ({children}) => {
 		const index = tempProducts.indexOf(getItem(id));
 		const product = tempProducts[index];
 		if(isItemInCart(product.id)) return;
-		
+
 		product.count = 1;
 		product.total = product.price;
 		setProducts(tempProducts);
@@ -33,12 +37,27 @@ const ProductProvider = ({children}) => {
 		return cart.includes(id);
 	}
 
+	function openModal(id) {
+		setModalData({
+			isOpen: true,
+			itemId: id
+		})
+	}
+
+	function closeModal() {
+		setModalData({
+			isOpen: false
+		});
+	}
+
 	return (
 		<ProductContext.Provider value={{
 			products,
+			getItem,
 			addToCart,
 			isItemInCart,
-			getItem
+			openModal,
+			closeModal
 		}}>
 			{children}
 		</ProductContext.Provider>
