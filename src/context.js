@@ -9,8 +9,8 @@ const ProductProvider = ({children}) => {
 	let [products, setProducts] = useState(storeProducts);
 	let [cart, setCart] = useState(initialCart ? initialCart : []);
 	let [modalData, setModalData] = useState({
-		isOpen: true,
-		itemId: 1
+		isOpen: false,
+		itemId: -1
 	});
 
 	useEffect(() => {
@@ -56,6 +56,7 @@ const ProductProvider = ({children}) => {
 			getItem,
 			addToCart,
 			isItemInCart,
+			modal: modalData,
 			openModal,
 			closeModal
 		}}>
@@ -66,4 +67,4 @@ const ProductProvider = ({children}) => {
 
 const ProductConsumer = ProductContext.Consumer;
 
-export { ProductProvider, ProductConsumer };
+export { ProductContext, ProductProvider, ProductConsumer };
