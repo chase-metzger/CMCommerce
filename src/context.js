@@ -20,6 +20,7 @@ const ProductProvider = ({children}) => {
 	});
 
 	useEffect(() => {
+		addCartTotals();
 		localStorage.setItem('cart', JSON.stringify(cart));
 	}, [cart]);
 
@@ -42,7 +43,6 @@ const ProductProvider = ({children}) => {
 				id: product.id,
 				count: 1
 			}]
-			///TODO CALCULATE TOTALS
 		});
 	}
 
@@ -76,6 +76,20 @@ const ProductProvider = ({children}) => {
 	function closeModal() {
 		setModalData({
 			isOpen: false
+		});
+	}
+
+	function addCartTotals() {
+		let subtotal = 0;
+		cart.items.forEach(item => subtotal += getItem(item.id).price);
+		const tempTax = subtotal * 0.1;
+		const tax = parseFloat(tempTax.toFixed(2));
+		const total = subtotal + tax;
+		setCart({
+			...cart,
+			subtotal,
+			tax,
+			total
 		});
 	}
 
