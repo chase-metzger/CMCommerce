@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Title from '../Title';
 import CartColumns from './CartColumns';
+import EmptyCart from './EmptyCart';
 
-export default class Cart extends React.Component {
-	render() {
+import { ProductContext } from '../../context';
+
+export default function Cart() {
+	const context = useContext(ProductContext);
+	const { cart } = context;
+
+	if(cart.items.length > 0) {
 		return (
-			<section>
+			<React.Fragment>
 				<Title name="your" title="cart" />
 				<CartColumns />
-			</section>
+			</React.Fragment>
 		);
+	} else {
+		return <EmptyCart />;
 	}
 }
