@@ -5,9 +5,15 @@ import { storeProducts } from './data';
 const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
+	//POSSIBLE TODO(?): USE REDUCERS AND ACTIONS INSTEAD
 	const initialCart = JSON.parse(window.localStorage.getItem('cart'));
 	let [products, setProducts] = useState(storeProducts);
-	let [cart, setCart] = useState(initialCart ? initialCart : []);
+	let [cart, setCart] = useState(initialCart ? initialCart : {
+		items: [],
+		subtotal: 0,
+		tax: 0,
+		total: 0
+	});
 	let [modalData, setModalData] = useState({
 		isOpen: false,
 		itemId: -1
@@ -30,11 +36,15 @@ const ProductProvider = ({children}) => {
 		product.count = 1;
 		product.total = product.price;
 		setProducts(tempProducts);
-		setCart([...cart, product.id]);
+		setCart({
+			...cart,
+			items: [...cart.items, product.id]
+			///TODO CALCULATE TOTALS
+		});
 	}
 
 	function isItemInCart(id) {
-		return cart.includes(id);
+		return cart.items.includes(id);
 	}
 
 	function openModal(id) {
