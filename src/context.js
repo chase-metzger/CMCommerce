@@ -47,11 +47,11 @@ const ProductProvider = ({children}) => {
 		return cart.items.includes(id);
 	}
 
-	function incrementCountOfItem(id) {
+	function incrementCountOfItemInCart(id) {
 		console.log('this is the increment method');
 	}
 
-	function decrementCountOfItem(id) {
+	function decrementCountOfItemInCart(id) {
 		console.log('this is the decrement method');
 	}
 
@@ -87,8 +87,8 @@ const ProductProvider = ({children}) => {
 				...cart,
 				doesContainItem: cartDoesContainItem,
 				addItem: addItemToCart,
-				incrementCountOfItem,
-				decrementCountOfItem,
+				incrementCountOfItem: incrementCountOfItemInCart,
+				decrementCountOfItem: decrementCountOfItemInCart,
 				removeItem: removeItemFromCart,
 				clearItems: clearCart
 			}
