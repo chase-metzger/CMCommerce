@@ -38,13 +38,16 @@ const ProductProvider = ({children}) => {
 		setProducts(tempProducts);
 		setCart({
 			...cart,
-			items: [...cart.items, product.id]
+			items: [...cart.items, {
+				id: product.id,
+				count: 1
+			}]
 			///TODO CALCULATE TOTALS
 		});
 	}
 
 	function cartDoesContainItem(id) {
-		return cart.items.includes(id);
+		return cart.items.filter(item => item.id === id).length > 0;
 	}
 
 	function incrementCountOfItemInCart(id) {
