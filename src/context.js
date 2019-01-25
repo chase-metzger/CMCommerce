@@ -27,11 +27,11 @@ const ProductProvider = ({children}) => {
 		return products.find(item => item.id === id);
 	}
 
-	function addToCart(id) {
+	function addItemToCart(id) {
 		let tempProducts = [...products];
 		const index = tempProducts.indexOf(getItem(id));
 		const product = tempProducts[index];
-		if(isItemInCart(product.id)) return;
+		if(cartDoesContainItem(product.id)) return;
 
 		product.count = 1;
 		product.total = product.price;
@@ -43,8 +43,24 @@ const ProductProvider = ({children}) => {
 		});
 	}
 
-	function isItemInCart(id) {
+	function cartDoesContainItem(id) {
 		return cart.items.includes(id);
+	}
+
+	function incrementCountOfItem(id) {
+		console.log('this is the increment method');
+	}
+
+	function decrementCountOfItem(id) {
+		console.log('this is the decrement method');
+	}
+
+	function removeItemFromCart(id) {
+		console.log('removing item from cart');
+	}
+
+	function clearCart() {
+		console.log('clearing the cart');
 	}
 
 	function openModal(id) {
@@ -64,11 +80,18 @@ const ProductProvider = ({children}) => {
 		<ProductContext.Provider value={{
 			products,
 			getItem,
-			addToCart,
-			isItemInCart,
 			modal: modalData,
 			openModal,
-			closeModal
+			closeModal,
+			cart: {
+				...cart,
+				doesContainItem: cartDoesContainItem,
+				addItem: addItemToCart,
+				incrementCountOfItem,
+				decrementCountOfItem,
+				removeItem: removeItemFromCart,
+				clearItems: clearCart
+			}
 		}}>
 			{children}
 		</ProductContext.Provider>

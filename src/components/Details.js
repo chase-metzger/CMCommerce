@@ -6,7 +6,7 @@ import { ProductConsumer } from '../context';
 
 export default class Details extends React.Component {
 
-	renderDetails = (product, inCart, addToCart, openModal) => {
+	renderDetails = (product, inCart, addItemToCart, openModal) => {
 		const { company, img, info, price, title } = product;
 		return (
 			<div className="container py-5">
@@ -49,7 +49,7 @@ export default class Details extends React.Component {
 							disabled={inCart}
 							yellow
 							onClick={() => {
-								addToCart(product.id);
+								addItemToCart(product.id);
 								openModal(product.id);
 							}}
 							>
@@ -67,9 +67,9 @@ export default class Details extends React.Component {
 				{value => {
 					const id = Number(this.props.match.params.id);
 					const product = value.getItem(id);
-					const inCart = value.isItemInCart(id);
+					const inCart = value.cart.doesContainItem(id);
 					if(product) {
-						return this.renderDetails(product, inCart, value.addToCart, value.openModal);
+						return this.renderDetails(product, inCart, value.cart.addItem, value.openModal);
 					} else {
 						return <Redirect to="/" />
 					}
