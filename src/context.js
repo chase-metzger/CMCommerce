@@ -63,7 +63,13 @@ const ProductProvider = ({children}) => {
 	}
 
 	function clearCart() {
-		console.log('clearing the cart');
+		setCart({
+			...cart,
+			items: [],
+			subtotal: 0,
+			tax: 0,
+			total: 0
+		})
 	}
 
 	function openModal(id) {
