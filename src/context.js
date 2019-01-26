@@ -50,16 +50,48 @@ const ProductProvider = ({children}) => {
 		return cart.items.filter(item => item.id === id).length > 0;
 	}
 
+	//TODO: CLEANUP THE increment/decrement functions
 	function incrementCountOfItemInCart(id) {
-		console.log('this is the increment method');
+		const tempItems = cart.items.map(item => {
+			if(item.id === id) {
+				++item.count;
+			}
+			return item;
+		});
+
+		setCart({
+			...cart,
+			items: tempItems
+		})
 	}
 
 	function decrementCountOfItemInCart(id) {
-		console.log('this is the decrement method');
+		let shouldRemove = false;
+		let tempItems = cart.items.map(item => {
+			if(item.id === id) {
+				--item.count;
+				shouldRemove = item.count <= 0;
+			}
+			return item;
+		});
+
+		if(shouldRemove) {
+			tempItems = tempItems.filter(item => item.id !== id);
+		}
+
+		setCart({
+			...cart,
+			items: tempItems
+		})
 	}
 
 	function removeItemFromCart(id) {
-		console.log('removing item from cart');
+		const tempItems = cart.items.filter(item => item.id !== id);
+
+		setCart({
+			...cart,
+			items: tempItems
+		});
 	}
 
 	function clearCart() {
