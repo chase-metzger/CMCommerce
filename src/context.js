@@ -119,7 +119,10 @@ const ProductProvider = ({children}) => {
 
 	function addCartTotals() {
 		let subtotal = 0;
-		cart.items.forEach(item => subtotal += getItem(item.id).price);
+		cart.items.forEach(cartItem => {
+			const item = getItem(cartItem.id);
+			subtotal += item.price * cartItem.count;
+		});
 		const tempTax = subtotal * 0.1;
 		const tax = parseFloat(tempTax.toFixed(2));
 		const total = subtotal + tax;
