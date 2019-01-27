@@ -1,19 +1,64 @@
 import React, { useState, useEffect } from 'react';
 
-import { storeProducts } from './data';
+const useFetch = (url) => {
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [data, setData] = useState(null);
+
+	useEffect(() => {
+		(async () => {
+			setLoading(true);
+			try {
+				const response = await fetch(url);
+				if(response.ok) {
+					const data = await response.json();
+					setData(data);
+				} else {
+					setError(new Error(response.statusText));
+				}
+			} catch(e) {
+				setError(e);
+			}
+
+			setLoading(false);
+		})();
+	}, [url]);
+
+	return { error, loading, data };
+}
+
+const useLocalStorage = (key, initialValue) => {
+	const [item, setInnerValue] = useState(() => {
+		try {
+			const item = window.localStorage.getItem(key);
+			return item ? JSON.parse(item) : initialValue;
+		} catch(error) {
+			return initialValue;
+		}
+	});
+
+	const setValue = (value) => {
+		setInnerValue(value);
+		window.localStorage.setItem(key, JSON.stringify(item));
+	};
+
+	return [item, setValue];
+}
 
 const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
 	//POSSIBLE TODO(?): USE REDUCERS AND ACTIONS INSTEAD
-	const initialCart = JSON.parse(window.localStorage.getItem('cart'));
-	let [products, setProducts] = useState(storeProducts);
-	let [cart, setCart] = useState(initialCart ? initialCart : {
+	let productData = useFetch('http://localhost:2134/api/products');
+	const products = (productData.error || productData.loading) ? [] : productData.data;
+
+	let [cart, setCart] = useLocalStorage('cart', {
 		items: [],
 		subtotal: 0,
 		tax: 0,
 		total: 0
 	});
+
 	let [modalData, setModalData] = useState({
 		isOpen: false,
 		itemId: -1
@@ -21,7 +66,6 @@ const ProductProvider = ({children}) => {
 
 	useEffect(() => {
 		addCartTotals();
-		localStorage.setItem('cart', JSON.stringify(cart));
 	}, [cart]);
 
 	function getItem(id) {
@@ -34,9 +78,6 @@ const ProductProvider = ({children}) => {
 		const product = tempProducts[index];
 		if(cartDoesContainItem(product.id)) return;
 
-		product.count = 1;
-		product.total = product.price;
-		setProducts(tempProducts);
 		setCart({
 			...cart,
 			items: [...cart.items, {
