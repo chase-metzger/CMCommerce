@@ -17,7 +17,7 @@ export default function Cart() {
 			<React.Fragment>
 				<Title name="your" title="cart" />
 				<CartColumns />
-				<CartList cart={cart} getItem={context.getItem} />
+				<CartList cart={cart} getItem={context.getProductById} />
 				<CartTotals cart={cart} />
 			</React.Fragment>
 		);

@@ -64,12 +64,12 @@ export default class Details extends React.Component {
 	render() {
 		return (
 			<ProductConsumer>
-				{value => {
+				{context => {
 					const id = Number(this.props.match.params.id);
-					const product = value.getItem(id);
-					const inCart = value.cart.doesContainItem(id);
+					const product = context.getProductById(id);
+					const inCart = context.cart.doesContainItem(id);
 					if(product) {
-						return this.renderDetails(product, inCart, value.cart.addItem, value.openModal);
+						return this.renderDetails(product, inCart, context.cart.addItem, context.openModal);
 					} else {
 						return <Redirect to="/" />
 					}

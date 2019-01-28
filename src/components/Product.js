@@ -17,7 +17,7 @@ export default class Product extends React.Component {
 							return (
 								<div className="img-container p-5">
 									<Link to={`/details/${id}`}>
-										<img src={img} alt="product" className="card-img-top" />
+										<img src={`${process.env.REACT_APP_PRODUCT_IMAGES_URL}/${img}`} alt="product" className="card-img-top" />
 									</Link>
 									<button className="cart-btn" disabled={inCart} onClick={() => {
 										value.cart.addItem(id);

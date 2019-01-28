@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const useFetch = (url) => {
+const useFetch = (url, initialData) => {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState(null);
+	const [data, setData] = useState(initialData);
 
 	useEffect(() => {
 		(async () => {
@@ -49,7 +49,7 @@ const ProductContext = React.createContext();
 
 const ProductProvider = ({children}) => {
 	//POSSIBLE TODO(?): USE REDUCERS AND ACTIONS INSTEAD
-	let productData = useFetch('http://localhost:2134/api/products');
+	let productData = useFetch(process.env.REACT_APP_PRODUCTS_API_URL);
 	const products = (productData.error || productData.loading) ? [] : productData.data;
 
 	let [cart, setCart] = useLocalStorage('cart', {
@@ -59,22 +59,26 @@ const ProductProvider = ({children}) => {
 		total: 0
 	});
 
+	console.log(cart);
+
 	let [modalData, setModalData] = useState({
 		isOpen: false,
 		itemId: -1
 	});
 
 	useEffect(() => {
-		addCartTotals();
+		if(products) {
+			addCartTotals();
+		}
 	}, [cart]);
 
-	function getItem(id) {
+	function getProductById(id) {
 		return products.find(item => item.id === id);
 	}
 
 	function addItemToCart(id) {
 		let tempProducts = [...products];
-		const index = tempProducts.indexOf(getItem(id));
+		const index = tempProducts.indexOf(getProductById(id));
 		const product = tempProducts[index];
 		if(cartDoesContainItem(product.id)) return;
 
@@ -161,7 +165,7 @@ const ProductProvider = ({children}) => {
 	function addCartTotals() {
 		let subtotal = 0;
 		cart.items.forEach(cartItem => {
-			const item = getItem(cartItem.id);
+			const item = getProductById(cartItem.id);
 			subtotal += item.price * cartItem.count;
 		});
 		const tempTax = subtotal * 0.1;
@@ -178,7 +182,7 @@ const ProductProvider = ({children}) => {
 	return (
 		<ProductContext.Provider value={{
 			products,
-			getItem,
+			getProductById,
 			modal: modalData,
 			openModal,
 			closeModal,

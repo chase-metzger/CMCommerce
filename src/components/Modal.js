@@ -8,7 +8,7 @@ import { ButtonContainer } from './Button';
 export default function Modal(props) {
 	const context = useContext(ProductContext);
 	const { closeModal, modal } = context;
-	const product = context.getItem(modal.itemId);
+	const product = context.getProductById(modal.itemId);
 	
 	if(!modal.isOpen) {
 		return null;
