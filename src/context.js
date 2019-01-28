@@ -59,8 +59,6 @@ const ProductProvider = ({children}) => {
 		total: 0
 	});
 
-	console.log(cart);
-
 	let [modalData, setModalData] = useState({
 		isOpen: false,
 		itemId: -1
